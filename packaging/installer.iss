@@ -1,7 +1,7 @@
 ; Inno Setup 6 Per-User Installer for Suno Director (`sudirector`) + Global AI Skills
 
 #ifndef MyAppVersion
-  #define MyAppVersion "0.1.0"
+  #define MyAppVersion "0.2.0"
 #endif
 
 [Setup]
@@ -17,6 +17,8 @@ DefaultGroupName=Suno Director
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 ChangesEnvironment=yes
+CloseApplications=yes
+RestartApplications=no
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern

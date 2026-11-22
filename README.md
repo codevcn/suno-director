@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/codevcn/suno-director/releases"><img src="https://img.shields.io/badge/version-v0.1.0%20(SemVer)-38BDF8?style=flat-square" alt="Version v0.1.0" /></a>
+  <a href="https://github.com/codevcn/suno-director/releases"><img src="https://img.shields.io/badge/version-v0.2.0%20(SemVer)-38BDF8?style=flat-square" alt="Version v0.2.0" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0EA5E9?style=flat-square" alt="MIT License" /></a>
   <img src="https://img.shields.io/badge/python-3.11%2B-38BDF8?style=flat-square" alt="Python 3.11+" />
   <img src="https://img.shields.io/badge/skills-Codex%20%7C%20Antigravity%20%7C%20Claude%20Code-0B0D12?style=flat-square" alt="Supported Agents" />
@@ -59,7 +59,7 @@
 
 ## Prerequisites
 
-- **Windows End Users (Installer)**: Windows 10/11 (x64). No Python installation required for the `SunoDirector-Setup-0.1.0.exe` bundle. Optional: Official Suno MCP configured in your AI client (falls back to `exports/suno-pack.md` if absent).
+- **Windows End Users (Installer)**: Windows 10/11 (x64). No Python installation required for the `SunoDirector-Setup-0.2.0.exe` bundle. Optional: Official Suno MCP configured in your AI client (falls back to `exports/suno-pack.md` if absent).
 - **Developers (From Source)**:
   - Python `3.11+`
   - Git (with submodules if tracking upstream docs)
@@ -69,9 +69,9 @@
 
 ## Installation
 
-### Option 1: Windows Installer (`SunoDirector-Setup-0.1.0.exe`)
+### Option 1: Windows Installer (`SunoDirector-Setup-0.2.0.exe`)
 
-1. Download `SunoDirector-Setup-0.1.0.exe` from the [GitHub Releases](https://github.com/codevcn/suno-director/releases) page.
+1. Download `SunoDirector-Setup-0.2.0.exe` from the [GitHub Releases](https://github.com/codevcn/suno-director/releases) page.
 2. Run the installer (per-user install into `%LOCALAPPDATA%\Programs\SunoDirector` — no Administrator UAC prompt required):
    - Adds `sudirector` to your user `PATH`.
    - Installs the Global AI Skill (`suno-director`) by default into all three AI agents:
@@ -84,7 +84,7 @@
    ```
    Expected output:
    ```text
-   sudirector 0.1.0
+   sudirector 0.2.0
    ```
 
 ### Option 2: Install From Source (Developer Mode)
@@ -116,7 +116,10 @@ Every subcommand supports `--json` for deterministic AI agent parsing.
 | `render <spec>` | Compile validated `SONG-SPEC.yaml` into deterministic `exports/suno-pack.md` | `sudirector render examples/vocal-song/SONG-SPEC.yaml` |
 | `preflight <spec>` | Run Execution Guard against `account-usage` YAML/JSON snapshot | `sudirector preflight examples/vocal-song/SONG-SPEC.yaml --account tests/fixtures/free-account.yaml --json` |
 | `install-skill` | Install `suno-director` Global Skill to Codex, Antigravity, Claude Code | `sudirector install-skill --agents codex antigravity claude` |
+| `update` | Check for updates or download, SHA256-verify, and run silent upgrade | `sudirector update --check --json` / `sudirector update --yes` |
 | `version` | Print or compute SemVer 2.0.0 bumps, comparisons, and compatibility | `sudirector version --bump minor --json` |
+
+> **Non-blocking Update Checks**: Normal commands refresh `%APPDATA%\SunoDirector\update-check.json` lazily in a detached background process (24h TTL) and write update notices strictly to `stderr` so `--json` `stdout` never breaks. Pass `--no-update-check` or set `SUDIRECTOR_NO_UPDATE_CHECK=1` to disable.
 
 ### Quick Example Workflow
 
@@ -244,7 +247,7 @@ powershell -ExecutionPolicy Bypass -File packaging\build_release.ps1
 
 `sudirector` follows **Semantic Versioning 2.0.0** (`MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`):
 
-- Single version source of truth: `src/music_director/version.py` (`VERSION = "0.1.0"`), verified by tests to match `pyproject.toml`.
+- Single version source of truth: `src/music_director/version.py` (`VERSION = "0.2.0"`), verified by tests to match `pyproject.toml`.
 - `0.x.y` releases allow minor feature/API iterations while maintaining strict schema validation and credit-guard invariants.
 - Built-in CLI utilities:
   ```bash

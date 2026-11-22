@@ -14,6 +14,7 @@ from .common import dump_yaml, load_yaml
 from .execution_guard import main as preflight_main
 from .paths import default_skill_targets, global_skill_source_dir, templates_dir
 from .render_suno_pack import main as render_main
+from .updater import UpdateError, check_for_update, maybe_notify_update, perform_update, refresh_cache_silently
 from .validate_spec import main as validate_main
 from .version import VERSION, bump_semver, compare_semver, format_version_info, parse_semver
 
@@ -155,8 +156,111 @@ def _cmd_version(argv: list[str]) -> int:
     return 0
 
 
+def _cmd_update(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(
+        prog="sudirector update",
+        description="Check for newer Suno Director releases or upgrade installed CLI & Global Skills.",
+    )
+    parser.add_argument("--check", action="store_true", help="Check GitHub Releases directly and report status without installing")
+    parser.add_argument("--refresh-cache", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("-y", "--yes", action="store_true", help="Skip confirmation prompt when installing update")
+    parser.add_argument("--force", action="store_true", help="Reinstall even if already at latest SemVer version")
+    parser.add_argument("--pre", action="store_true", help="Include prerelease versions (e.g. -rc.1)")
+    parser.add_argument("--no-launch", action="store_true", help="Download and verify installer without launching it")
+    parser.add_argument("--json", action="store_true", dest="as_json", help="Emit JSON output")
+    args = parser.parse_args(argv)
+
+    if args.refresh_cache:
+        ok = refresh_cache_silently()
+        return 0 if ok else 0
+
+    if args.check:
+        try:
+            status = check_for_update(force_refresh=True, include_prereleases=args.pre, timeout=6.0)
+        except Exception as exc:
+            if args.as_json:
+                print(json.dumps({"error": str(exc), "current_version": VERSION}))
+            else:
+                print(f"ERROR: Failed to check updates: {exc}", file=sys.stderr)
+            return 1
+        if args.as_json:
+            print(json.dumps(status))
+        elif status["update_available"]:
+            print(f"Update available: v{status['current_version']} -> v{status['latest_version']} ({status['release_url']})")
+        else:
+            print(f"Up to date: v{status['current_version']} (latest: v{status['latest_version']})")
+        return 0
+
+    try:
+        preview = check_for_update(force_refresh=True, include_prereleases=args.pre, timeout=6.0)
+    except Exception as exc:
+        if args.as_json:
+            print(json.dumps({"status": "error", "error": str(exc)}))
+        else:
+            print(f"ERROR: Failed to query latest release: {exc}", file=sys.stderr)
+        return 1
+
+    if preview["update_available"] and not args.yes and not args.as_json and preview["install_mode"] != "source":
+        if sys.stdin.isatty():
+            reply = input(f"Upgrade sudirector v{preview['current_version']} -> v{preview['latest_version']}? [y/N]: ").strip().lower()
+            if reply not in {"y", "yes"}:
+                print("Cancelled.")
+                return 1
+        else:
+            print("ERROR: Non-interactive update requires --yes.", file=sys.stderr)
+            return 1
+
+    try:
+        res = perform_update(
+            force=args.force,
+            include_prereleases=args.pre,
+            no_launch=args.no_launch,
+        )
+    except UpdateError as exc:
+        if args.as_json:
+            print(json.dumps({"status": "error", "error": str(exc)}))
+        else:
+            print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
+    if args.as_json:
+        print(json.dumps(res))
+    elif res["status"] == "up_to_date":
+        print(f"Already up to date: v{res['current_version']}.")
+    elif res["status"] == "source_checkout":
+        print(f"v{res['current_version']} -> v{res['latest_version']} available. {res['hint']}")
+    elif res["status"] == "updated_pip":
+        print(f"Updated via pip to v{res['latest_version']}. Run `sudirector install-skill` to refresh Global Skills.")
+    else:
+        print(f"Verified v{res['latest_version']} installer ({res['installer_path']}). Launching silent updater...")
+    return 0
+
+
+def _dispatch_command(cmd: str, rest: list[str]) -> int:
+    if cmd == "init":
+        return _cmd_init(rest)
+    if cmd == "validate":
+        return validate_main(rest)
+    if cmd == "render":
+        return render_main(rest)
+    if cmd == "preflight":
+        return preflight_main(rest)
+    if cmd == "install-skill":
+        return _cmd_install_skill(rest)
+    if cmd == "version":
+        return _cmd_version(rest)
+    if cmd == "update":
+        return _cmd_update(rest)
+    if cmd == "check-update":
+        return _cmd_update(["--check", *rest])
+    return 2
+
+
 def main(argv: list[str] | None = None) -> int:
-    args_list = list(sys.argv[1:] if argv is None else argv)
+    raw_args = list(sys.argv[1:] if argv is None else argv)
+    no_update_check = "--no-update-check" in raw_args
+    args_list = [arg for arg in raw_args if arg != "--no-update-check"]
+
     if args_list in (["--version"], ["-V"]):
         print(f"sudirector {VERSION}")
         return 0
@@ -166,10 +270,11 @@ def main(argv: list[str] | None = None) -> int:
         description="Suno Director CLI — Spec-driven, credit-guarded AI music production framework.",
     )
     parser.add_argument("-V", "--version", action="store_true", help="Print SemVer version and exit")
+    parser.add_argument("--no-update-check", action="store_true", help="Skip background update check")
     parser.add_argument(
         "command",
         nargs="?",
-        choices=["init", "validate", "render", "preflight", "install-skill", "version"],
+        choices=["init", "validate", "render", "preflight", "install-skill", "version", "update", "check-update"],
         help="Subcommand to execute",
     )
     parser.add_argument("rest", nargs=argparse.REMAINDER, help="Subcommand arguments")
@@ -185,18 +290,11 @@ def main(argv: list[str] | None = None) -> int:
 
     cmd = args_list[0]
     rest = args_list[1:]
-    if cmd == "init":
-        return _cmd_init(rest)
-    if cmd == "validate":
-        return validate_main(rest)
-    if cmd == "render":
-        return render_main(rest)
-    if cmd == "preflight":
-        return preflight_main(rest)
-    if cmd == "install-skill":
-        return _cmd_install_skill(rest)
-    if cmd == "version":
-        return _cmd_version(rest)
+    if cmd not in {"init", "validate", "render", "preflight", "install-skill", "version", "update", "check-update"}:
+        parser.print_help()
+        return 2
 
-    parser.print_help()
-    return 2
+    rc = _dispatch_command(cmd, rest)
+    if not no_update_check and cmd not in {"update", "check-update"}:
+        maybe_notify_update()
+    return rc

@@ -53,6 +53,23 @@ def user_runtime_overrides_path() -> Path:
     return user_config_dir() / "runtime-overrides.yaml"
 
 
+def update_cache_path() -> Path:
+    return user_config_dir() / "update-check.json"
+
+
+def update_lock_path() -> Path:
+    return user_config_dir() / "update-check.lock"
+
+
+def detect_install_mode() -> str:
+    """Classify runtime installation as 'installer', 'source', or 'pip'."""
+    if is_frozen():
+        return "installer"
+    if (bundle_root() / ".git").exists():
+        return "source"
+    return "pip"
+
+
 def default_skill_targets(home: Path | None = None) -> dict[str, Path]:
     """Return supported global AI agent skill directories (Codex, Antigravity, Claude Code)."""
     root = home or Path.home()

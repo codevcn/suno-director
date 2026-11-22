@@ -20,6 +20,9 @@ Run `sudirector` from any workspace:
 
 Always verify availability first if unsure (`sudirector --version`). Never edit bundled program files; store per-user runtime overrides under `%APPDATA%\SunoDirector\runtime-overrides.yaml`.
 
+### Update Notices (`stderr`)
+`sudirector` runs a passive non-blocking update check and prints update notices strictly to `stderr` so JSON `stdout` stays valid. If you see `[sudirector] Update available...`, inform the user briefly or ask permission before running `sudirector update --yes` — never auto-upgrade silently mid-workflow. Pass `--no-update-check` (or set `SUDIRECTOR_NO_UPDATE_CHECK=1`) in automated batches.
+
 ## Hard Safety & Credit Rules
 
 1. **Preflight Before Any Spend**: Never call a credit-spending Suno MCP tool (`audio-create`, `audio-covers-create`, `audio-extensions-create`, `audio-edit`, `audio-download`, etc.) before running `sudirector preflight --json` against a fresh `account-usage` snapshot and getting `decision == "allowed"`.

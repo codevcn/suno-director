@@ -7,18 +7,19 @@ from pathlib import Path
 
 from music_director.cli import main as cli_main
 from music_director.common import load_capabilities_config
+from music_director.version import VERSION
 
 
 def test_cli_version_flags(capsys) -> None:
     rc = cli_main(["--version"])
     assert rc == 0
-    assert "sudirector 0.1.0" in capsys.readouterr().out
+    assert f"sudirector {VERSION}" in capsys.readouterr().out
 
-    rc = cli_main(["version", "--bump", "minor", "--json"])
+    rc = cli_main(["version", "--bump", "minor", "--json", "--no-update-check"])
     assert rc == 0
     data = json.loads(capsys.readouterr().out)
-    assert data["version"] == "0.1.0"
-    assert data["bumped"] == "0.2.0"
+    assert data["version"] == VERSION
+    assert data["bumped"] == "0.3.0"
 
 
 def test_cli_init_validate_render_preflight_workflow(tmp_path: Path, capsys) -> None:
@@ -44,11 +45,11 @@ def test_cli_init_validate_render_preflight_workflow(tmp_path: Path, capsys) -> 
     assert Path(ren_res["output_path"]).exists()
 
     free_acc = repo_root / "tests" / "fixtures" / "free-account.yaml"
-    rc = cli_main(["preflight", str(vocal_spec), "--account", str(free_acc), "--json"])
+    rc = cli_main(["preflight", str(vocal_spec), "--account", str(free_acc), "--json", "--no-update-check"])
     assert rc == 1  # per_cycle blocked without --approve
     plan_res = json.loads(capsys.readouterr().out)
     assert plan_res["decision"] == "blocked"
-    assert plan_res["tool_version"] == "0.1.0"
+    assert plan_res["tool_version"] == "0.2.0"
 
 
 def test_cli_install_skill_targets_three_agents(tmp_path: Path, capsys) -> None:

@@ -1,6 +1,7 @@
 # PyInstaller --onedir spec for Suno Director (`sudirector`)
 
 from pathlib import Path
+from PyInstaller.utils.hooks import collect_data_files
 
 ROOT = Path(SPECPATH).resolve().parent
 
@@ -10,6 +11,7 @@ datas = [
     (str(ROOT / "adapters"), "adapters"),
     (str(ROOT / "governance"), "governance"),
     (str(ROOT / "packaging" / "global-skill"), "packaging/global-skill"),
+    *collect_data_files("certifi"),
 ]
 
 a = Analysis(
@@ -17,7 +19,7 @@ a = Analysis(
     pathex=[str(ROOT / "src")],
     binaries=[],
     datas=datas,
-    hiddenimports=["yaml", "jsonschema"],
+    hiddenimports=["yaml", "jsonschema", "certifi"],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

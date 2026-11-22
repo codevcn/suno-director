@@ -20,7 +20,7 @@ def test_pyproject_version_matches_package_version() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     pyproject = tomllib.loads((repo_root / "pyproject.toml").read_text(encoding="utf-8"))
     assert pyproject["project"]["version"] == VERSION
-    assert VERSION == "0.1.0"
+    assert VERSION == "0.2.0"
 
 
 def test_semver_parsing_and_validation() -> None:
@@ -67,5 +67,5 @@ def test_semver_bump_and_compatibility() -> None:
     assert parse_semver("1.0.0").is_compatible_with(parse_semver("2.0.0")) is False
 
     info = format_version_info()
-    assert info["version"] == "0.1.0"
-    assert info["tag"] == "v0.1.0"
+    assert info["version"] == VERSION
+    assert info["tag"] == f"v{VERSION}"

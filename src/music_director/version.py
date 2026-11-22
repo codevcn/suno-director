@@ -6,7 +6,7 @@ import re
 from dataclasses import dataclass
 from typing import Literal
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 _SEMVER_RE = re.compile(
     r"^(?P<major>0|[1-9]\d*)\."
