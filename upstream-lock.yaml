@@ -1,0 +1,43 @@
+bitwize:
+  repo: https://github.com/bitwize-music-studio/claude-ai-music-skills.git
+  submodule_path: upstream/bitwize
+  branch: main
+  commit: 8e0e19c0fe7072830ba2918e351102c3c0be9dc4
+  reviewed_at: "2026-11-22"
+  license: CC0-1.0
+  role: "Suno operational craft, lyrics QC, pronunciation fixes, take listening"
+  watched_paths:
+    - reference/suno/models.md
+    - reference/suno/best-practices.md
+    - reference/suno/creative-sliders.md
+    - reference/suno/structure-tags.md
+    - reference/suno/pronunciation-guide.md
+    - reference/suno/mcp-api-mapping.md
+    - skills/suno-engineer/
+    - skills/lyric-writer/
+    - skills/pronunciation-specialist/
+    - skills/check-take/
+    - skills/edit-take/
+    - skills/extend-take/
+
+composition:
+  repo: https://github.com/jtydhr88/music-composition-skills.git
+  submodule_path: upstream/composition
+  branch: main
+  commit: e283141babb8806f2798d5fd2d9e833e75c1bd26
+  reviewed_at: "2026-11-22"
+  license: "MIT (excluding third-party book quotations per upstream NOTICE)"
+  role: "Music composition intelligence, arrangement architecture, anti-AI-tell criteria, spec discipline"
+  watched_paths:
+    - plugins/music-composition/skills/mc-workflow/
+    - plugins/music-composition/skills/mc-development/
+    - plugins/music-composition/skills/mc-harmony/
+    - plugins/music-composition/skills/mc-melody/
+    - plugins/music-composition/skills/mc-arrangement-arch/
+    - plugins/music-composition/skills/mc-orchestration/
+    - plugins/music-composition/skills/mc-texture-layering/
+    - plugins/music-composition/skills/mc-rhythm-section/
+    - plugins/music-composition/skills/mc-vocal-direction/
+    - plugins/music-composition/skills/mc-mix-intent/
+    - plugins/music-composition/skills/mc-render-compile/
+    - plugins/music-composition/skills/mc-ai-tell-audit/

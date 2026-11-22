@@ -1,0 +1,16 @@
+plan: pro
+song_credits:
+  remaining: 2500
+download_credits:
+  remaining: 20
+models:
+  allowed:
+    - v6
+    - v6-wild
+    - v6-mini
+capabilities:
+  create: true
+  cover: true
+  extend: true
+  edit: true
+  download: monthly

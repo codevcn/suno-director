@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://music-director.local/schemas/execution-plan.schema.json",
+  "title": "Execution Plan",
+  "description": "Preflight capability normalization, model resolution, cost estimation, and approval gate output.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "reason",
+    "operation",
+    "mcp_tool",
+    "requested_model",
+    "resolved_model",
+    "estimated_song_credits",
+    "estimated_download_credits",
+    "capability_snapshot",
+    "approval"
+  ],
+  "properties": {
+    "decision": { "type": "string", "enum": ["allowed", "blocked"] },
+    "reason": { "type": "string", "minLength": 1 },
+    "operation": { "type": "string", "enum": ["create", "cover", "extend", "edit", "download"] },
+    "mcp_tool": { "type": "string", "minLength": 1 },
+    "requested_model": { "type": "string", "minLength": 1 },
+    "resolved_model": { "type": ["string", "null"] },
+    "estimated_song_credits": { "type": "integer", "minimum": 0 },
+    "estimated_download_credits": { "type": "integer", "minimum": 0 },
+    "remaining_song_credits_after": { "type": ["integer", "null"], "minimum": 0 },
+    "remaining_download_credits_after": { "type": ["integer", "null"], "minimum": 0 },
+    "baseline_commit_sha": { "type": ["string", "null"] },
+    "spec_revision_before": { "type": "integer", "minimum": 1 },
+    "spec_revision_after": { "type": ["integer", "null"], "minimum": 1 },
+    "mcp_payload": { "type": "object" },
+    "omitted_controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["control", "reason"],
+        "properties": {
+          "control": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "capability_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plan", "song_credits", "download_credits", "models", "capabilities"],
+      "properties": {
+        "plan": { "type": "string" },
+        "song_credits": {
+          "type": "object",
+          "required": ["remaining"],
+          "properties": { "remaining": { "type": "integer", "minimum": 0 } }
+        },
+        "download_credits": {
+          "type": "object",
+          "required": ["remaining"],
+          "properties": { "remaining": { "type": "integer", "minimum": 0 } }
+        },
+        "models": {
+          "type": "object",
+          "required": ["allowed"],
+          "properties": {
+            "allowed": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "capabilities": {
+          "type": "object",
+          "required": ["create", "cover", "extend", "edit", "download"],
+          "properties": {
+            "create": { "type": "boolean" },
+            "cover": { "type": "boolean" },
+            "extend": { "type": "boolean" },
+            "edit": { "type": "boolean" },
+            "download": { "type": "string" },
+            "advanced_controls": { "type": "boolean" },
+            "max_mode": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["confirmation_mode", "approved", "approved_song_credit_budget", "approved_download_credit_budget"],
+      "properties": {
+        "confirmation_mode": { "type": "string", "enum": ["per_cycle", "budget"] },
+        "approved": { "type": "boolean" },
+        "approved_song_credit_budget": { "type": "integer", "minimum": 0 },
+        "approved_download_credit_budget": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "options": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

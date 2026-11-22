@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://music-director.local/schemas/diagnosis.schema.json",
+  "title": "Take Diagnosis",
+  "description": "Structured post-generation diagnosis separating spec_adherence from quality/AI-tells and routing root causes to a single owner.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["take_id", "verdict", "scores", "ai_tells", "issues", "next_action"],
+  "properties": {
+    "take_id": { "type": "string", "minLength": 1 },
+    "song_url": { "type": ["string", "null"] },
+    "verdict": { "type": "string", "enum": ["accept", "revise", "reject"] },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spec_adherence", "musical_quality", "vocal_quality", "artifact_risk"],
+      "properties": {
+        "spec_adherence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "musical_quality": { "type": "number", "minimum": 0, "maximum": 1 },
+        "vocal_quality": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "artifact_risk": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "ai_tells": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "class", "domain", "evidence", "spec_path", "recommended_change"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+          "class": {
+            "type": "string",
+            "enum": ["SPEC_ERROR", "RENDER_ERROR", "EXECUTION_ERROR", "MIX_PHASE2"]
+          },
+          "domain": {
+            "type": "string",
+            "enum": ["composition", "arrangement", "lyrics", "pronunciation", "suno", "execution", "mix"]
+          },
+          "evidence": { "type": "string", "minLength": 1 },
+          "spec_path": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "recommended_change": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "next_action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "owner"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["accept_take", "revise_spec", "retry_render", "execute_extend", "execute_edit", "execute_cover", "flag_phase2"]
+        },
+        "owner": {
+          "type": "string",
+          "enum": [
+            "music-director",
+            "composition-architect",
+            "arrangement-architect",
+            "lyric-writer",
+            "pronunciation-specialist",
+            "suno-engineer",
+            "execution-guard",
+            "take-reviewer"
+          ]
+        }
+      }
+    }
+  }
+}

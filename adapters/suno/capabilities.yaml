@@ -1,0 +1,41 @@
+# Capability Normalization Rules & Credit Cost Reference
+# Runtime `account-usage` response is always the live authority.
+
+model_resolution_priority:
+  - v6
+  - v6-wild
+  - v6-mini
+
+credit_costs:
+  create:
+    song_credits: 10
+    download_credits: 0
+    outputs: 2
+    max_mode_multiplier: 2
+  cover:
+    song_credits: 10
+    download_credits: 0
+    outputs: 2
+    max_mode_multiplier: 2
+  extend:
+    song_credits: 10
+    download_credits: 0
+    outputs: 2
+    max_mode_multiplier: 2
+  edit:
+    song_credits: 10
+    download_credits: 0
+    outputs: 2
+    max_mode_multiplier: 1
+  download:
+    song_credits: 0
+    download_credits: 1
+    outputs: 1
+
+feature_gates:
+  advanced_controls: "controls.advanced"
+  cover: "generate.cover"
+  extend: "generate.extend"
+  simple: "generate.simple"
+  custom: "generate.custom"
+  download: "audio.download"

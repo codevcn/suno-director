@@ -1,0 +1,14 @@
+plan: free
+song_credits:
+  remaining: 150
+download_credits:
+  remaining: 7
+models:
+  allowed:
+    - v6-mini
+capabilities:
+  create: true
+  cover: true
+  extend: true
+  edit: true
+  download: limited

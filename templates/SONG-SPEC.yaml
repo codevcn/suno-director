@@ -1,0 +1,99 @@
+# Canonical SONG-SPEC Template (v1.0)
+# Single Source of Truth for creative intent.
+# Do NOT store execution logs, MCP clip IDs history, or account state in this file.
+
+spec_version: "1.0"
+revision: 1
+
+identity:
+  title: ""
+  language: "en"
+  concept: ""
+  intent: ""                     # One core sentence: what this song does emotionally/musically
+  target_duration_seconds: 210
+
+creative_direction:
+  genre: []
+  subgenre: []
+  mood: []
+  reference_notes: []            # What structural/production traits to borrow (never copy lyrics/melody)
+  avoid: []
+
+music:
+  key:
+    tonic: ""                    # ASCII e.g. C, F#, Bb
+    mode: ""                     # major | minor | dorian | mixolydian | lydian | phrygian | aeolian | locrian
+  tempo_bpm: 100
+  meter: "4/4"
+
+  harmony:
+    global_intent: ""
+    sections: {}                 # Map of form[].id -> { roman: "|...| ", chords: "|...| ", color_note: "" }
+
+  melody:
+    range: ""                    # e.g. A3-E5 (or instrument range for instrumental)
+    motif: ""
+    contour: ""
+    peak_strategy: ""
+
+form:
+  - id: "intro"
+    name: "Intro"                # Intro | Verse | Pre-Chorus | Chorus | Post-Chorus | Bridge | Instrumental | Solo | Breakdown | Drop | Outro
+    bars: 4
+    energy: 20                   # 0-100
+    function: ""
+
+arrangement:
+  instrumentation: []            # List of { id, instrument, role, register_band }
+  section_layers: {}             # Map of form[].id -> { active: [], enter: [], exit: [] }
+  transitions: []                # List of { before_section, technique, note }
+  energy_curve: []               # List of { section, energy } matching form[]
+  mix_intent: {}                 # Phase 1 creative intent (depth, width, focal_element)
+
+vocal:
+  enabled: true
+  singer_count: 1
+  register: ""
+  timbre: ""
+  delivery: ""
+  section_direction: {}          # Map of form[].id -> delivery cue string
+
+lyrics:
+  language: "en"
+  text: ""                       # Suno-ready section-tagged lyrics (empty or section-tags-only if vocal.enabled=false)
+  rhyme_strategy: ""
+  prosody_notes: []
+  pronunciation_overrides: []    # List of { term, phonetic, reason }
+
+generation:
+  backend: "suno"
+  intent: "create"               # create | cover | extend | edit
+  model_preference: "auto"       # auto | v6 | v6-wild | v6-mini
+  style_prompt: ""
+  exclude_styles: []
+  source:
+    audio_id: null
+    continue_at: null
+  controls:
+    variety: 0                   # 0 = Off (preserve engineered style_prompt)
+    max_mode: false
+    weirdness: null              # 0.0 - 1.0 optional
+    style_influence: null        # 0.0 - 1.0 optional
+    audio_influence: null        # 0.0 - 1.0 optional (covers/voices)
+
+execution_policy:
+  confirmation_mode: "per_cycle" # per_cycle | budget
+  approved_song_credit_budget: 0
+  approved_download_credit_budget: 0
+  allow_auto_iteration: false
+
+acceptance:
+  must:
+    - "chorus has clear lift"
+    - "lyrics are intelligible"
+  should: []
+  reject_if: []
+
+status:
+  phase: "draft"                 # draft | validated | ready_for_execution | generated | revising | accepted
+  selected_take_id: null

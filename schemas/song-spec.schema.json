@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://music-director.local/schemas/song-spec.schema.json",
+  "title": "SONG-SPEC",
+  "description": "Single Source of Truth for creative intent and backend-agnostic song specification (V1).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "spec_version",
+    "revision",
+    "identity",
+    "creative_direction",
+    "music",
+    "form",
+    "arrangement",
+    "vocal",
+    "lyrics",
+    "generation",
+    "execution_policy",
+    "acceptance",
+    "status"
+  ],
+  "properties": {
+    "spec_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "language", "concept", "intent", "target_duration_seconds"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "language": { "type": "string", "minLength": 2 },
+        "concept": { "type": "string", "minLength": 1 },
+        "intent": { "type": "string", "minLength": 1 },
+        "target_duration_seconds": { "type": "integer", "minimum": 15, "maximum": 480 }
+      }
+    },
+    "creative_direction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["genre", "subgenre", "mood", "reference_notes", "avoid"],
+      "properties": {
+        "genre": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "subgenre": { "type": "array", "items": { "type": "string" } },
+        "mood": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "reference_notes": { "type": "array", "items": { "type": "string" } },
+        "avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "music": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "tempo_bpm", "meter", "harmony", "melody"],
+      "properties": {
+        "key": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tonic", "mode"],
+          "properties": {
+            "tonic": { "type": "string", "minLength": 1 },
+            "mode": {
+              "type": "string",
+              "enum": ["major", "minor", "ionian", "dorian", "phrygian", "lydian", "mixolydian", "aeolian", "locrian"]
+            }
+          }
+        },
+        "tempo_bpm": { "type": "integer", "minimum": 20, "maximum": 300 },
+        "meter": { "type": "string", "pattern": "^[1-9][0-9]*/(1|2|4|8|16)$" },
+        "harmony": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["global_intent", "sections"],
+          "properties": {
+            "global_intent": { "type": "string", "minLength": 1 },
+            "sections": { "type": "object" }
+          }
+        },
+        "melody": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["range", "motif", "contour", "peak_strategy"],
+          "properties": {
+            "range": { "type": "string" },
+            "motif": { "type": "string", "minLength": 1 },
+            "contour": { "type": "string" },
+            "peak_strategy": { "type": "string" }
+          }
+        }
+      }
+    },
+    "form": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "bars", "energy", "function"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": {
+            "type": "string",
+            "enum": [
+              "Intro", "Verse", "Pre-Chorus", "Chorus", "Post-Chorus",
+              "Bridge", "Instrumental", "Solo", "Breakdown", "Drop", "Outro"
+            ]
+          },
+          "bars": { "type": "integer", "minimum": 1, "maximum": 128 },
+          "energy": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "function": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "arrangement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instrumentation", "section_layers", "transitions", "energy_curve", "mix_intent"],
+      "properties": {
+        "instrumentation": { "type": "array", "minItems": 1 },
+        "section_layers": { "type": "object" },
+        "transitions": { "type": "array" },
+        "energy_curve": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["section", "energy"],
+            "properties": {
+              "section": { "type": "string", "minLength": 1 },
+              "energy": { "type": "integer", "minimum": 0, "maximum": 100 }
+            }
+          }
+        },
+        "mix_intent": { "type": "object" }
+      }
+    },
+    "vocal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "singer_count", "register", "timbre", "delivery", "section_direction"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "singer_count": { "type": "integer", "minimum": 0, "maximum": 16 },
+        "register": { "type": "string" },
+        "timbre": { "type": "string" },
+        "delivery": { "type": "string" },
+        "section_direction": { "type": "object" }
+      }
+    },
+    "lyrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "text", "rhyme_strategy", "prosody_notes", "pronunciation_overrides"],
+      "properties": {
+        "language": { "type": "string" },
+        "text": { "type": "string", "maxLength": 5000 },
+        "rhyme_strategy": { "type": "string" },
+        "prosody_notes": { "type": "array", "items": { "type": "string" } },
+        "pronunciation_overrides": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["term", "phonetic"],
+            "properties": {
+              "term": { "type": "string", "minLength": 1 },
+              "phonetic": { "type": "string", "minLength": 1 },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backend", "intent", "model_preference", "style_prompt", "exclude_styles", "source", "controls"],
+      "properties": {
+        "backend": { "type": "string", "enum": ["suno"] },
+        "intent": { "type": "string", "enum": ["create", "cover", "extend", "edit"] },
+        "model_preference": { "type": "string", "enum": ["auto", "v6", "v6-wild", "v6-mini"] },
+        "style_prompt": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "exclude_styles": { "type": "array", "items": { "type": "string" } },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["audio_id", "continue_at"],
+          "properties": {
+            "audio_id": { "type": ["string", "null"] },
+            "continue_at": { "type": ["number", "null"], "minimum": 0 }
+          }
+        },
+        "controls": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "variety": { "type": "integer", "minimum": 0, "maximum": 4 },
+            "max_mode": { "type": "boolean" },
+            "weirdness": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "style_influence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "audio_influence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "execution_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmation_mode",
+        "approved_song_credit_budget",
+        "approved_download_credit_budget",
+        "allow_auto_iteration"
+      ],
+      "properties": {
+        "confirmation_mode": { "type": "string", "enum": ["per_cycle", "budget"] },
+        "approved_song_credit_budget": { "type": "integer", "minimum": 0 },
+        "approved_download_credit_budget": { "type": "integer", "minimum": 0 },
+        "allow_auto_iteration": { "type": "boolean" }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["must", "should", "reject_if"],
+      "properties": {
+        "must": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "should": { "type": "array", "items": { "type": "string" } },
+        "reject_if": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "selected_take_id"],
+      "properties": {
+        "phase": {
+          "type": "string",
+          "enum": ["draft", "validated", "ready_for_execution", "generated", "revising", "accepted"]
+        },
+        "selected_take_id": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

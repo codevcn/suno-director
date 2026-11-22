@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Secrets & environment
+.env
+.env.*
+*.key
+*.pem
+
+# Browser / MCP runtime artifacts
+.playwright-mcp/
+
+# Generated workspace media & local transient files
+workspace/*/runs/*/raw-*
+*.mp3
+*.wav
+*.flac
+*.ogg
+
+# OS
+.DS_Store
+Thumbs.db

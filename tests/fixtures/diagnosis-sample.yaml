@@ -1,0 +1,23 @@
+take_id: "take-fixture-001"
+song_url: "https://suno.com/song/take-fixture-001"
+verdict: "revise"
+scores:
+  spec_adherence: 0.72
+  musical_quality: 0.68
+  vocal_quality: 0.81
+  artifact_risk: 0.14
+ai_tells:
+  - "flat_chorus_contrast"
+issues:
+  - id: "chorus_no_lift"
+    severity: "high"
+    class: "RENDER_ERROR"
+    domain: "suno"
+    evidence: "SONG-SPEC sets pre_chorus=58 -> chorus=86, but rendered chorus stayed nearly equal in loudness and density."
+    spec_path:
+      - "generation.style_prompt"
+      - "lyrics.text"
+    recommended_change: "Strengthen dynamic lift cue in pre-chorus and chorus style descriptors without rewriting harmony."
+next_action:
+  type: "retry_render"
+  owner: "suno-engineer"

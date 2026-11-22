@@ -1,0 +1,321 @@
+spec_version: "1.0"
+revision: 1
+
+identity:
+  title: "Neon Last Train"
+  language: "en"
+  concept: "Missing the second-to-last commuter train on a rainy Tokyo night and choosing to watch the city lights instead of rushing."
+  intent: "Deliver bittersweet nocturnal release as the chorus opens above tight city-pop groove."
+  target_duration_seconds: 210
+
+creative_direction:
+  genre:
+    - "1980s Japanese city pop"
+    - "boogie R&B"
+  subgenre:
+    - "urban night pop"
+  mood:
+    - "bittersweet"
+    - "nocturnal"
+    - "nostalgic"
+  reference_notes:
+    - "Borrow tight slap/fingered bass pocket and Rhodes warmth; original melody and lyrics"
+  avoid:
+    - "EDM drop"
+    - "trap hi-hats"
+    - "modern sidechain pumping"
+    - "fade out ending"
+
+music:
+  key:
+    tonic: "F#"
+    mode: "minor"
+  tempo_bpm: 108
+  meter: "4/4"
+
+  harmony:
+    global_intent: "Classic city-pop major-7th and dominant-9th suspensions with a lifted key-color shift in the bridge."
+    sections:
+      intro:
+        roman: "| IVmaj7 | V7sus4 | IIIm7 | VIm7 |"
+        chords: "| Dmaj7 | E7sus4 | C#m7 | F#m7 |"
+      verse_1:
+        roman: "| IIm7 | V9 | Imaj7 | VIm7 | IIm7 | V7sus4 | IIIm7 | VI7 |"
+        chords: "| G#m7 | C#9 | F#m7 | Dmaj7 | G#m7 | C#7sus4 | Amaj7 | Dmaj7 |"
+      pre_chorus:
+        roman: "| IVmaj7 | V/V | IIIm7 | VI7 |"
+        chords: "| Dmaj7 | G#7 | C#m7 | F#7 |"
+      chorus_1:
+        roman: "| IVmaj7 | V7 | IIIm7 | VIm7 | IIm7 | V9 | Imaj7 | V7/IV |"
+        chords: "| Dmaj7 | E7 | C#m7 | F#m7 | Bm7 | E9 | Amaj7 | A7 |"
+      verse_2:
+        roman: "| IIm7 | V9 | Imaj7 | VIm7 | IIm7 | V7sus4 | IIIm7 | VI7 |"
+        chords: "| G#m7 | C#9 | F#m7 | Dmaj7 | G#m7 | C#7sus4 | Amaj7 | Dmaj7 |"
+      chorus_2:
+        roman: "| IVmaj7 | V7 | IIIm7 | VIm7 | IIm7 | V9 | Imaj7 | V7/IV |"
+        chords: "| Dmaj7 | E7 | C#m7 | F#m7 | Bm7 | E9 | Amaj7 | A7 |"
+      bridge:
+        roman: "| bVImaj7 | bVII7 | IIIm7 | bIIIm7 | IIm7 | V7sus4 |"
+        chords: "| Dmaj7 | E7 | C#m7 | Cm7 | Bm7 | E7sus4 |"
+        color_note: "Chromatic passing Cm7 softens tension before the saxophone solo handoff"
+      chorus_3:
+        roman: "| IVmaj7 | V7 | IIIm7 | VIm7 | IIm7 | V9 | Imaj7 | IVmaj7 |"
+        chords: "| Dmaj7 | E7 | C#m7 | F#m7 | Bm7 | E9 | Amaj7 | Dmaj7 |"
+      outro:
+        roman: "| IVmaj7 | V7 | IIIm7 | VIm9 |"
+        chords: "| Dmaj7 | E7 | C#m7 | F#m9 |"
+
+  melody:
+    range: "A3-E5"
+    motif: "Syncopated four-note pickup rising a fifth on the chorus downbeat"
+    contour: "restrained mid-register verses exploding into sustained upper-chest chorus hooks"
+    peak_strategy: "Save E5 sustained belt for Chorus 3 final hook repeat"
+
+form:
+  - id: "intro"
+    name: "Intro"
+    bars: 6
+    energy: 32
+    function: "Establish Rhodes chords, muted guitar 16ths, and gated snare pickup"
+  - id: "verse_1"
+    name: "Verse"
+    bars: 16
+    energy: 40
+    function: "Intimate train-platform scene with tight bass pocket"
+  - id: "pre_chorus"
+    name: "Pre-Chorus"
+    bars: 6
+    energy: 58
+    function: "Drop kick for 2 bars at tail before chorus lift"
+  - id: "chorus_1"
+    name: "Chorus"
+    bars: 16
+    energy: 86
+    function: "Full city-pop chorus with analog brass stabs and stacked backing harmonies"
+  - id: "verse_2"
+    name: "Verse"
+    bars: 14
+    energy: 48
+    function: "Richer percussive guitar comping and Rhodes counter-fills"
+  - id: "chorus_2"
+    name: "Chorus"
+    bars: 16
+    energy: 88
+    function: "Second chorus maintains lift with added synth sparkle"
+  - id: "bridge"
+    name: "Bridge"
+    bars: 10
+    energy: 50
+    function: "Strip rhythm guitar, open space for expressive tenor saxophone solo"
+  - id: "chorus_3"
+    name: "Chorus"
+    bars: 16
+    energy: 94
+    function: "Final chorus peak with ad-lib octave harmonies"
+  - id: "outro"
+    name: "Outro"
+    bars: 6
+    energy: 38
+    function: "Clean band stop on F#m9 chord with crisp saxophone tail"
+
+arrangement:
+  instrumentation:
+    - id: "drums"
+      instrument: "80s acoustic-electronic hybrid kit with gated reverb snare"
+      role: "driving groove"
+      register_band: "full"
+    - id: "bass"
+      instrument: "fingered and popped electric jazz bass"
+      role: "melodic low-end pocket"
+      register_band: "low"
+    - id: "rhodes"
+      instrument: "warm stereo Rhodes electric piano"
+      role: "harmonic bed"
+      register_band: "mid"
+    - id: "clean_gtr"
+      instrument: "16th-note muted clean Stratocaster"
+      role: "rhythmic shimmer"
+      register_band: "high-mid"
+    - id: "analog_synth"
+      instrument: "analog poly-synth brass and lead sparkles"
+      role: "chorus lift and counter-hook"
+      register_band: "high-mid"
+    - id: "tenor_sax"
+      instrument: "warm breathy tenor saxophone"
+      role: "bridge solo and outro signature hook"
+      register_band: "mid-high"
+  section_layers:
+    intro:
+      active: ["drums", "bass", "rhodes", "clean_gtr"]
+      enter: ["drums", "bass", "rhodes", "clean_gtr"]
+      exit: []
+    verse_1:
+      active: ["drums", "bass", "rhodes", "clean_gtr"]
+      enter: []
+      exit: []
+    pre_chorus:
+      active: ["bass", "rhodes", "analog_synth"]
+      enter: ["analog_synth"]
+      exit: ["drums", "clean_gtr"]
+    chorus_1:
+      active: ["drums", "bass", "rhodes", "clean_gtr", "analog_synth"]
+      enter: ["drums", "clean_gtr"]
+      exit: []
+    verse_2:
+      active: ["drums", "bass", "rhodes", "clean_gtr"]
+      enter: []
+      exit: ["analog_synth"]
+    chorus_2:
+      active: ["drums", "bass", "rhodes", "clean_gtr", "analog_synth"]
+      enter: ["analog_synth"]
+      exit: []
+    bridge:
+      active: ["drums", "bass", "rhodes", "tenor_sax"]
+      enter: ["tenor_sax"]
+      exit: ["clean_gtr", "analog_synth"]
+    chorus_3:
+      active: ["drums", "bass", "rhodes", "clean_gtr", "analog_synth", "tenor_sax"]
+      enter: ["clean_gtr", "analog_synth"]
+      exit: []
+    outro:
+      active: ["bass", "rhodes", "tenor_sax"]
+      enter: []
+      exit: ["drums", "clean_gtr", "analog_synth"]
+  transitions:
+    - before_section: "chorus_1"
+      technique: "pre_chorus_drum_drop"
+      note: "Mute drums for the last bar of pre-chorus before gated snare fill into chorus"
+    - before_section: "bridge"
+      technique: "texture_strip"
+      note: "Pull back synth brass and clean guitar so tenor sax steps upfront"
+    - before_section: "outro"
+      technique: "clean_stop"
+      note: "Tight band cadence ending cleanly on F#m9 without fading"
+  energy_curve:
+    - section: "intro"
+      energy: 32
+    - section: "verse_1"
+      energy: 40
+    - section: "pre_chorus"
+      energy: 58
+    - section: "chorus_1"
+      energy: 86
+    - section: "verse_2"
+      energy: 48
+    - section: "chorus_2"
+      energy: 88
+    - section: "bridge"
+      energy: 50
+    - section: "chorus_3"
+      energy: 94
+    - section: "outro"
+      energy: 38
+  mix_intent:
+    focal_element: "lead_vocal"
+    width_contrast: "tight verse pocket opening wide on stereo synth brass in chorus"
+    depth_note: "upfront crisp female vocal, warm tape-saturated backing band"
+    mood_priority: "bittersweet nocturnal city pop groove"
+
+vocal:
+  enabled: true
+  singer_count: 1
+  register: "mezzo-soprano"
+  timbre: "clear silky tone with light breathy edge"
+  delivery: "conversational intimacy in verses, soaring legato lift in choruses"
+  section_direction:
+    verse_1: "close mic, gentle wistful phrasing"
+    pre_chorus: "rising tension, clipped phrasing"
+    chorus_1: "open chest voice, stacked backing harmonies"
+    verse_2: "warmer rhythmic confidence"
+    chorus_2: "bright layered harmonies"
+    chorus_3: "soaring peak with octave ad-libs"
+
+lyrics:
+  language: "en"
+  text: |
+    [Intro]
+
+    [Verse 1 - intimate, close vocal]
+    Raindrops trace the neon on the platform glass
+    Zero-zero-fifteen, watching shadows pass
+    Ticket in my coat pocket, ink begins to blur
+    Counting every footstep where we never were
+
+    [Pre-Chorus - rising tension]
+    Yellow warning lights blink along the track
+    Once the doors slide shut, there is no turning back
+
+    [Chorus - open, layered harmonies]
+    Ride the neon last train through the midnight glow
+    Every streetlamp flickers like a silent show
+    I let go of yesterday at the station gate
+    Maybe missing one train means I am right on time, not late
+
+    [Verse 2 - rhythmic groove]
+    Vending machine hums a soft electric tune
+    Reflections on the river catch a silver moon
+    Empty wooden bench feels lighter than before
+    Someone else's laughter fades behind the door
+
+    [Chorus - bright, energetic]
+    Ride the neon last train through the midnight glow
+    Every streetlamp flickers like a silent show
+    I let go of yesterday at the station gate
+    Maybe missing one train means I am right on time, not late
+
+    [Bridge - instrumental sax solo]
+
+    [Chorus - soaring ad-libs]
+    Ride the neon last train through the midnight glow
+    Every streetlamp flickers like a silent show
+    I let go of yesterday at the station gate
+    Maybe missing one train means I am right on time, not late
+
+    [Outro - clean saxophone tail]
+  rhyme_strategy: "AABB in verses, AABB with internal assonance in chorus"
+  prosody_notes:
+    - "Keep verse lines 9-11 syllables to sit cleanly in 108 BPM pocket"
+    - "Spell out 00:15 as 'Zero-zero-fifteen' for unambiguous singing"
+  pronunciation_overrides:
+    - term: "00:15"
+      phonetic: "Zero-zero-fifteen"
+      reason: "Avoid Suno misreading colon time format"
+
+generation:
+  backend: "suno"
+  intent: "create"
+  model_preference: "auto"
+  style_prompt: "Female mezzo-soprano vocal with silky clear tone and wistful phrasing. 1980s Japanese city pop, bittersweet nocturnal groove, 108 BPM, F# minor, fingered and popped electric bass playing slightly ahead of the beat, stereo Rhodes electric piano, 16th-note muted clean guitar, gated reverb snare, analog synth brass in chorus, warm tenor saxophone solo in bridge, warm tape saturation, clean band stop ending"
+  exclude_styles:
+    - "EDM drop"
+    - "trap hi-hats"
+    - "modern sidechain pumping"
+    - "fade out ending"
+  source:
+    audio_id: null
+    continue_at: null
+  controls:
+    variety: 0
+    max_mode: false
+
+execution_policy:
+  confirmation_mode: "per_cycle"
+  approved_song_credit_budget: 0
+  approved_download_credit_budget: 0
+  allow_auto_iteration: false
+
+acceptance:
+  must:
+    - "chorus has clear lift above verse and pre-chorus"
+    - "all written lyrics are sung cleanly without skipping lines"
+    - "tenor saxophone bridge solo is audible"
+    - "clean ending without fade out"
+  should:
+    - "tempo stays near 108 BPM with tight bass pocket"
+  reject_if:
+    - "chorus sounds flat or same energy as verse"
+    - "modern trap hi-hats or EDM drop appear"
+
+status:
+  phase: "validated"
+  selected_take_id: null

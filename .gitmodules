@@ -1,0 +1,6 @@
+[submodule "upstream/bitwize"]
+	path = upstream/bitwize
+	url = https://github.com/bitwize-music-studio/claude-ai-music-skills.git
+[submodule "upstream/composition"]
+	path = upstream/composition
+	url = https://github.com/jtydhr88/music-composition-skills.git

@@ -1,0 +1,220 @@
+spec_version: "1.0"
+revision: 1
+
+identity:
+  title: "Three O'Clock Shade"
+  language: "en"
+  concept: "An unhurried late-afternoon instrumental evoking sitting on a quiet veranda waiting for someone."
+  intent: "Capture warm, unhurried afternoon stillness through a lyrical nylon-string guitar motif."
+  target_duration_seconds: 160
+
+creative_direction:
+  genre:
+    - "acoustic instrumental"
+    - "bossa-tinged chamber folk"
+  subgenre:
+    - "nylon guitar miniature"
+  mood:
+    - "warm"
+    - "unhurried"
+    - "sunlit"
+  reference_notes:
+    - "Small-room nylon guitar intimacy with subtle upright bass counterpoint"
+    - "Avoid big cinematic builds or dramatic drums"
+  avoid:
+    - "heavy drums"
+    - "orchestral swells"
+    - "synth pads"
+    - "fade out ending"
+
+music:
+  key:
+    tonic: "D"
+    mode: "major"
+  tempo_bpm: 92
+  meter: "4/4"
+
+  harmony:
+    global_intent: "Warm major-7th and add9 voicings with gentle secondary-dominant color in the B section."
+    sections:
+      intro:
+        roman: "| Imaj7 | IVmaj7 |"
+        chords: "| Dmaj7 | Gmaj7 |"
+      theme_a1:
+        roman: "| Imaj7 | VIm7 | IIm7 | V13 | Imaj7 | IVmaj7 | IIIm7 | VI7 |"
+        chords: "| Dmaj7 | Bm7 | Em7 | A13 | Dmaj7 | Gmaj7 | F#m7 | B7 |"
+      theme_b:
+        roman: "| bVImaj7 | bVII7 | Imaj7 | V/V | IIm7 | V7sus4 |"
+        chords: "| Bbmaj7 | C7 | Dmaj7 | E7 | Em7 | A7sus4 |"
+        color_note: "Modal interchange bVI-bVII lifts afternoon warmth before resolving home"
+      interlude_drop:
+        roman: "| IVmaj7 | IIIm7 | IIm7 | V7 |"
+        chords: "| Gmaj7 | F#m7 | Em7 | A7 |"
+      theme_a2:
+        roman: "| Imaj7 | VIm7 | IIm7 | V13 | IVmaj7 | IIIm7 | IIm7 | Imaj9 |"
+        chords: "| Dmaj7 | Bm7 | Em7 | A13 | Gmaj7 | F#m7 | Em7 | Dmaj9 |"
+      outro:
+        roman: "| IVmaj7 | Imaj9 |"
+        chords: "| Gmaj7 | Dmaj9 |"
+
+  melody:
+    range: "D4-F#5"
+    motif: "Three-note ascending step followed by a lingering major-7th sigh on beat 3"
+    contour: "gentle arch peaking on theme_b, settling back to tonic register"
+    peak_strategy: "Theme B reaches F#5 on warm Rhodes/guitar unison; A2 drops back to conversational register"
+
+form:
+  - id: "intro"
+    name: "Intro"
+    bars: 4
+    energy: 22
+    function: "Establish nylon fingerpicking pulse and room air"
+  - id: "theme_a1"
+    name: "Verse"
+    bars: 14
+    energy: 44
+    function: "State core nylon-guitar motif over sparse bass and brushes"
+  - id: "theme_b"
+    name: "Chorus"
+    bars: 12
+    energy: 72
+    function: "Warm harmonic lift with gentle Rhodes cushion and shaker"
+  - id: "interlude_drop"
+    name: "Breakdown"
+    bars: 6
+    energy: 30
+    function: "Subtractive reset: percussion drops out, nylon guitar plays delicate chord harmonics"
+  - id: "theme_a2"
+    name: "Instrumental"
+    bars: 14
+    energy: 64
+    function: "Restate theme with singing bass counter-melody and brushed snare"
+  - id: "outro"
+    name: "Outro"
+    bars: 10
+    energy: 25
+    function: "Slowing phrasing resolving cleanly on a held Dmaj9 nylon chord"
+
+arrangement:
+  instrumentation:
+    - id: "nylon_gtr"
+      instrument: "fingerpicked nylon-string acoustic guitar"
+      role: "lead melody and harmonic arpeggios"
+      register_band: "mid"
+    - id: "upright_bass"
+      instrument: "warm acoustic upright bass"
+      role: "low-end anchor and melodic counterpoint"
+      register_band: "low"
+    - id: "light_perc"
+      instrument: "brushed snare and subtle wooden shaker"
+      role: "gentle pocket"
+      register_band: "high-mid"
+    - id: "rhodes_kb"
+      instrument: "soft vintage electric piano (Rhodes)"
+      role: "color sustain in lifted sections only"
+      register_band: "mid"
+  section_layers:
+    intro:
+      active: ["nylon_gtr"]
+      enter: ["nylon_gtr"]
+      exit: []
+    theme_a1:
+      active: ["nylon_gtr", "upright_bass", "light_perc"]
+      enter: ["upright_bass", "light_perc"]
+      exit: []
+    theme_b:
+      active: ["nylon_gtr", "upright_bass", "light_perc", "rhodes_kb"]
+      enter: ["rhodes_kb"]
+      exit: []
+    interlude_drop:
+      active: ["nylon_gtr", "upright_bass"]
+      enter: []
+      exit: ["light_perc", "rhodes_kb"]
+    theme_a2:
+      active: ["nylon_gtr", "upright_bass", "light_perc"]
+      enter: ["light_perc"]
+      exit: []
+    outro:
+      active: ["nylon_gtr"]
+      enter: []
+      exit: ["upright_bass", "light_perc"]
+  transitions:
+    - before_section: "interlude_drop"
+      technique: "subtraction"
+      note: "Drop shaker and Rhodes completely to let nylon guitar breathe"
+    - before_section: "outro"
+      technique: "ritardando_cadence"
+      note: "Bass drops on bar 2 of outro; guitar rings out naturally on final Dmaj9"
+  energy_curve:
+    - section: "intro"
+      energy: 22
+    - section: "theme_a1"
+      energy: 44
+    - section: "theme_b"
+      energy: 72
+    - section: "interlude_drop"
+      energy: 30
+    - section: "theme_a2"
+      energy: 64
+    - section: "outro"
+      energy: 25
+  mix_intent:
+    focal_element: "nylon_gtr"
+    width_contrast: "narrow intimate intro opening slightly in theme_b, closing back to mono-centered guitar outro"
+    depth_note: "close dry wooden pluck upfront, soft room tail on Rhodes"
+    mood_priority: "unhurried afternoon stillness"
+
+vocal:
+  enabled: false
+  singer_count: 0
+  register: ""
+  timbre: ""
+  delivery: ""
+  section_direction: {}
+
+lyrics:
+  language: "en"
+  text: ""
+  rhyme_strategy: "none (instrumental)"
+  prosody_notes: []
+  pronunciation_overrides: []
+
+generation:
+  backend: "suno"
+  intent: "create"
+  model_preference: "auto"
+  style_prompt: "Acoustic instrumental chamber folk, warm sunlit afternoon stillness, 92 BPM, D major, fingerpicked nylon-string acoustic guitar lead, upright acoustic bass counterpoint, brushed snare and soft shaker, subtle Rhodes electric piano in bridge, natural room ambience, held acoustic chord ending"
+  exclude_styles:
+    - "vocals"
+    - "heavy drums"
+    - "orchestral swells"
+    - "synth pads"
+    - "fade out ending"
+  source:
+    audio_id: null
+    continue_at: null
+  controls:
+    variety: 0
+    max_mode: false
+
+execution_policy:
+  confirmation_mode: "per_cycle"
+  approved_song_credit_budget: 0
+  approved_download_credit_budget: 0
+  allow_auto_iteration: false
+
+acceptance:
+  must:
+    - "strictly instrumental with zero sung vocals"
+    - "clear nylon-string guitar lead motif"
+    - "audible subtraction drop before final theme return"
+    - "clean held ending without fade out"
+  should:
+    - "tempo stays relaxed around 92 BPM"
+  reject_if:
+    - "any singing or vocal ad-libs appear"
+    - "heavy drum kit or EDM percussion enters"
+
+status:
+  phase: "validated"
+  selected_take_id: null

@@ -1,0 +1,86 @@
+# Semantic Routing Map: SONG-SPEC -> Official Suno MCP
+# Note: Argument schemas are resolved from live MCP tool definitions at runtime.
+
+operations:
+  create:
+    tool: audio-create
+    follow_up:
+      - audio-wait
+      - audio-retrieve
+    zero_credit_review:
+      - audio-listen
+      - audio-listen-wait
+    field_mapping:
+      title: identity.title
+      style: generation.style_prompt
+      lyrics: lyrics.text
+      negative_style: generation.exclude_styles
+      instrumental: "!vocal.enabled"
+      model: resolved_model
+      duration: identity.target_duration_seconds
+      controls.variety: generation.controls.variety
+      controls.weirdness: generation.controls.weirdness
+      controls.style_influence: generation.controls.style_influence
+      max_mode: generation.controls.max_mode
+
+  cover:
+    tool: audio-covers-create
+    requires:
+      - generation.source.audio_id
+    follow_up:
+      - audio-wait
+      - audio-retrieve
+    zero_credit_review:
+      - audio-listen
+      - audio-listen-wait
+    field_mapping:
+      id: generation.source.audio_id
+      title: identity.title
+      style: generation.style_prompt
+      lyrics: lyrics.text
+      negative_style: generation.exclude_styles
+      model: resolved_model
+      controls.audio_influence: generation.controls.audio_influence
+      controls.variety: generation.controls.variety
+
+  extend:
+    tool: audio-extensions-create
+    requires:
+      - generation.source.audio_id
+      - generation.source.continue_at
+    follow_up:
+      - audio-wait
+      - audio-full-song
+      - audio-retrieve
+    zero_credit_review:
+      - audio-listen
+      - audio-listen-wait
+    field_mapping:
+      id: generation.source.audio_id
+      continue_at: generation.source.continue_at
+      style: generation.style_prompt
+      lyrics: lyrics.text
+      negative_style: generation.exclude_styles
+      model: resolved_model
+
+  edit:
+    tool: audio-edit
+    requires:
+      - generation.source.audio_id
+    follow_up:
+      - audio-wait
+      - audio-retrieve
+    zero_credit_review:
+      - audio-listen
+      - audio-listen-wait
+    field_mapping:
+      id: generation.source.audio_id
+      title: identity.title
+      lyrics: lyrics.text
+      style: generation.style_prompt
+
+  download:
+    tool: audio-download
+    requires_explicit_download_approval: true
+    field_mapping:
+      id: status.selected_take_id
