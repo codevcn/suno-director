@@ -28,6 +28,7 @@
     "estimated_download_credits": { "type": "integer", "minimum": 0 },
     "remaining_song_credits_after": { "type": ["integer", "null"], "minimum": 0 },
     "remaining_download_credits_after": { "type": ["integer", "null"], "minimum": 0 },
+    "tool_version": { "type": ["string", "null"] },
     "baseline_commit_sha": { "type": ["string", "null"] },
     "spec_revision_before": { "type": "integer", "minimum": 1 },
     "spec_revision_after": { "type": ["integer", "null"], "minimum": 1 },

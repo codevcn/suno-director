@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <title>Music Director - V3 Guarded Energy Crest</title>
+  <g id="guard-shield">
+    <path d="M50 10 L84 22 V50 C84 70 69 83 50 90 C31 83 16 70 16 50 V22 Z" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+  </g>
+  <g id="energy-curve" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M27 58 H36 L43 38 L52 63 L61 31 L67 52 H73"/>
+  </g>
+</svg>

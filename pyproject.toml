@@ -1,7 +1,11 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "music-director"
+name = "suno-director"
 version = "0.1.0"
-description = "AI Music-Production Framework with SONG-SPEC SSOT, credit-guarded Suno MCP execution, and structured diagnosis feedback loop."
+description = "Suno Director (sudirector) — Spec-driven, credit-guarded AI music-production CLI & Global Skill framework."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -15,6 +19,12 @@ dev = [
   "pytest>=8.0",
 ]
 
+[project.scripts]
+sudirector = "music_director.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["scripts"]
+pythonpath = ["src", "scripts"]

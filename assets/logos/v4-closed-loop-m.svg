@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <title>Music Director - V4 Closed-Loop Monogram</title>
+  <g id="loop-monogram" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 74 V30 L50 56 L80 30 V74"/>
+    <path d="M20 74 C36 86 64 86 80 74" stroke-width="5.5"/>
+  </g>
+  <g id="anchor-nodes" fill="currentColor">
+    <circle cx="20" cy="26" r="5"/>
+    <circle cx="50" cy="56" r="6"/>
+    <circle cx="80" cy="26" r="5"/>
+  </g>
+</svg>
