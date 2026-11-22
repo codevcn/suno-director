@@ -1,5 +1,8 @@
 # Capability Normalization Rules & Credit Cost Reference
 # Runtime `account-usage` response is always the live authority.
+# Note (verified live on 2026-11-22): Free accounts may list "controls.advanced" in
+# account-usage.features while audio-create rejects sliders/negative_style/max_mode
+# with 403 feature_not_on_plan; execution_guard enforces plan != "free" for those flags.
 
 model_resolution_priority:
   - v6

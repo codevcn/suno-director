@@ -90,7 +90,7 @@ def test_raw_account_usage_normalization() -> None:
     assert snap["song_credits"]["remaining"] == 150
     assert snap["download_credits"]["remaining"] == 7
     assert snap["capabilities"]["download"] == "limited"
-    assert snap["capabilities"]["advanced_controls"] is True
+    assert snap["capabilities"]["advanced_controls"] is False
     assert snap["capabilities"]["max_mode"] is False
 
     spec = _load_spec()
@@ -99,6 +99,11 @@ def test_raw_account_usage_normalization() -> None:
     assert plan["resolved_model"] == "v6-mini"
     assert plan["spec_revision_before"] == spec["revision"]
     assert plan["spec_revision_after"] == spec["revision"]
+    # Live Free plan omits negative_style and sliders to prevent 403 feature_not_on_plan
+    assert "negative_style" not in plan["mcp_payload"]
+    assert "controls" not in plan["mcp_payload"]
+    omitted = {item["control"] for item in plan["omitted_controls"]}
+    assert {"generation.exclude_styles", "generation.controls.variety"}.issubset(omitted)
 
 
 def test_unsupported_controls_omitted_with_explanation() -> None:
@@ -125,6 +130,7 @@ def test_unsupported_controls_omitted_with_explanation() -> None:
     omitted_names = {item["control"] for item in plan["omitted_controls"]}
     assert {
         "generation.exclude_styles",
+        "generation.controls.variety",
         "generation.controls.weirdness",
         "generation.controls.style_influence",
         "generation.controls.audio_influence",
@@ -150,18 +156,18 @@ def test_unsupported_max_mode_blocked_with_explanation() -> None:
 
 
 def test_audio_influence_omitted_on_create_without_voice_id() -> None:
-    raw_with_adv = {
-        "allowed_models": ["v6-mini"],
+    raw_pro = {
+        "allowed_models": ["v6", "v6-wild", "v6-mini"],
         "features": ["generate.simple", "generate.custom", "controls.advanced"],
         "suno_account": {
-            "credits_remaining": 150,
-            "download_credits_remaining": 7,
-            "plan": {"name": "Free", "period": None},
+            "credits_remaining": 2500,
+            "download_credits_remaining": 20,
+            "plan": {"name": "Pro", "period": "month"},
         },
     }
     spec = copy.deepcopy(_load_spec())
     spec["generation"]["controls"]["audio_influence"] = 0.6
-    plan = evaluate_execution_plan(spec, raw_with_adv, user_approved=True)
+    plan = evaluate_execution_plan(spec, raw_pro, user_approved=True)
     assert plan["decision"] == "allowed"
     assert "audio_influence" not in plan["mcp_payload"].get("controls", {})
     assert any(item["control"] == "generation.controls.audio_influence" for item in plan["omitted_controls"])

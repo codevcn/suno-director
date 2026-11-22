@@ -72,8 +72,10 @@ def normalize_capability_snapshot(raw_usage: dict[str, Any]) -> dict[str, Any]:
             "extend": "generate.extend" in features,
             "edit": bool(allowed_models),
             "download": dl_cap,
-            "advanced_controls": "controls.advanced" in features,
-            "max_mode": ("max_mode" in features) or ("controls.max_mode" in features),
+            # Live Suno MCP audio-create rejects negative_style and sliders on Free plan (feature_not_on_plan)
+            # even when account-usage.features lists "controls.advanced".
+            "advanced_controls": ("controls.advanced" in features) and (plan_name != "free"),
+            "max_mode": (("max_mode" in features) or ("controls.max_mode" in features)) and (plan_name != "free"),
         },
     }
 
