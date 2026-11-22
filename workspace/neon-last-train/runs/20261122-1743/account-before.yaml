@@ -1,0 +1,28 @@
+# Live account-usage snapshot taken before real Step 11 execution
+allowed_models:
+  - v6-mini
+features:
+  - generate.simple
+  - generate.cover
+  - generate.extend
+  - audio.upload
+  - audio.download
+  - controls.advanced
+  - speech
+  - audio.midi
+  - voices
+  - generate.stems
+  - generate.mashup
+  - generate.custom
+metered_features: {}
+suno_account:
+  cancel_on: null
+  credits_remaining: 150
+  download_credits_remaining: 7
+  monthly_limit: 100
+  monthly_usage: 0
+  plan:
+    name: Free
+    period: null
+  renews_on: null
+  visuals_credits_remaining: 0

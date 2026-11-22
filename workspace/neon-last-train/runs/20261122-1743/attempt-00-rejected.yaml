@@ -1,0 +1,16 @@
+attempt: "attempt-00-rejected"
+timestamp_utc: "2026-11-22T10:43:38Z"
+tool: "audio-create"
+model: "v6-mini"
+idempotency_key: "music-director-neon-last-train-r1-20261122"
+outcome: "rejected_before_charge"
+http_status: 403
+error_code: "feature_not_on_plan"
+error_message: "your suno.com plan doesn't include a feature this song uses: its voice, sliders, excluded styles or Max Mode"
+sent_optional_fields:
+  negative_style: "EDM drop, trap hi-hats, modern sidechain pumping, fade out ending"
+  controls:
+    variety: 0
+credits_charged: 0
+verified_remaining_credits_after: 150
+runtime_override_action: "Recorded free/v6-mini exclude_styles and sliders effective=false in adapters/suno/capabilities.yaml; retried cleanly in attempt-01."

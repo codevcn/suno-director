@@ -1,0 +1,45 @@
+take_id: "0d84855b-1ffc-4864-812c-1b717bcf8a19"
+song_url: "https://suno.com/song/0d84855b-1ffc-4864-812c-1b717bcf8a19"
+verdict: "revise"
+scores:
+  spec_adherence: 0.80
+  musical_quality: 0.88
+  vocal_quality: 0.88
+  artifact_risk: 0.08
+adherence:
+  tempo: "confirmed_match"
+  key: "ambiguous"
+  structure: "confirmed_match"
+  chorus_lift: "confirmed_match"
+  ending: "confirmed_mismatch"
+  vocal_intelligibility: "confirmed_match"
+observations:
+  tempo_check:
+    expected: "108 BPM"
+    observed: "108 BPM (Take 1), 107.1 BPM (Take 2)"
+    status: "confirmed_match"
+  key_check:
+    expected: "F# minor"
+    observed: "A major (Take 1 & Take 2)"
+    status: "ambiguous"
+    reason: "A major is the relative major of F# minor; chorus progressions resolve through Amaj7 and automated key detection commonly flips tonal center between relative major/minor. Not classified as a render failure without human audition confirmation."
+  ending_check:
+    expected: "clean ending without fade out"
+    observed: "clean_ending=false (fade out)"
+    status: "confirmed_mismatch"
+ai_tells:
+  - "default_ai_fade_out_ending"
+issues:
+  - id: "unwanted_fade_out_ending"
+    severity: "high"
+    class: "SPEC_ERROR"
+    domain: "cross_domain"
+    confidence: "high"
+    evidence: "Spec cross-domain conflict: acceptance.must requires 'clean ending without fade out' and arrangement.transitions defines clean_stop on F#m9, whereas lyrics.text ends with '[Outro - clean saxophone tail]' (a cue that can guide Suno to sustain/fade) AND Free/v6-mini runtime_overrides omitted exclude_styles ('fade out ending'). Spec must be unambiguous first before blaming backend rendering."
+    spec_path:
+      - "lyrics.text"
+      - "generation.style_prompt"
+    recommended_change: "Dispatch cross-domain targeted revision via music-director to lyric-writer (replace '[Outro - clean saxophone tail]' with '[Outro - crisp final cadence]', '[Cold Stop]', '[End]') and suno-engineer (explicit abrupt cold band stop cue in generation.style_prompt); keep arrangement.transitions unchanged. Proposed only—not yet regenerated."
+next_action:
+  type: "revise_spec"
+  owner: "music-director"

@@ -1,8 +1,6 @@
 # Capability Normalization Rules & Credit Cost Reference
 # Runtime `account-usage` response is always the live authority.
-# Note (verified live on 2026-11-22): Free accounts may list "controls.advanced" in
-# account-usage.features while audio-create rejects sliders/negative_style/max_mode
-# with 403 feature_not_on_plan; execution_guard enforces plan != "free" for those flags.
+# Layering: declared capability -> live account-usage -> runtime_overrides -> effective capability.
 
 model_resolution_priority:
   - v6
@@ -42,3 +40,17 @@ feature_gates:
   simple: "generate.simple"
   custom: "generate.custom"
   download: "audio.download"
+
+# Observed backend compatibility overrides layered AFTER account-usage.
+# Remove an entry here if a live run confirms Suno enabled it for that plan/model.
+runtime_overrides:
+  free:
+    v6-mini:
+      exclude_styles:
+        effective: false
+        evidence: "403 feature_not_on_plan (excluded styles) despite controls.advanced in account-usage.features"
+        observed_at: "2026-11-22"
+      sliders:
+        effective: false
+        evidence: "403 feature_not_on_plan (sliders) despite controls.advanced in account-usage.features"
+        observed_at: "2026-11-22"

@@ -72,10 +72,8 @@ def normalize_capability_snapshot(raw_usage: dict[str, Any]) -> dict[str, Any]:
             "extend": "generate.extend" in features,
             "edit": bool(allowed_models),
             "download": dl_cap,
-            # Live Suno MCP audio-create rejects negative_style and sliders on Free plan (feature_not_on_plan)
-            # even when account-usage.features lists "controls.advanced".
-            "advanced_controls": ("controls.advanced" in features) and (plan_name != "free"),
-            "max_mode": (("max_mode" in features) or ("controls.max_mode" in features)) and (plan_name != "free"),
+            "advanced_controls": "controls.advanced" in features,
+            "max_mode": ("max_mode" in features) or ("controls.max_mode" in features),
         },
     }
 
@@ -91,6 +89,48 @@ def _resolve_model(requested: str, allowed_models: list[str], priority: list[str
     return None
 
 
+def resolve_effective_capabilities(
+    snapshot: dict[str, Any],
+    *,
+    resolved_model: str | None,
+    runtime_overrides: dict[str, Any] | None = None,
+) -> dict[str, tuple[bool, str | None]]:
+    """Layer declared snapshot capabilities with observed runtime_overrides (plan -> model -> feature)."""
+    plan_name = snapshot.get("plan", "unknown")
+    caps = snapshot.get("capabilities") or {}
+    declared_adv = caps.get("advanced_controls", True)
+    declared_max = caps.get("max_mode", plan_name in {"pro", "premier"})
+
+    overrides = runtime_overrides or {}
+    model_overrides = (overrides.get(plan_name) or {}).get(resolved_model or "", {}) or {}
+
+    def _apply_override(
+        feature_key: str,
+        declared: bool,
+        declared_name: str,
+    ) -> tuple[bool, str | None]:
+        ovr = model_overrides.get(feature_key)
+        if isinstance(ovr, dict) and ovr.get("effective") is False:
+            evidence = ovr.get("evidence") or "observed backend rejection"
+            return (
+                False,
+                f"Omitted due to observed runtime incompatibility on '{plan_name}'/'{resolved_model}' "
+                f"({evidence}; declared {declared_name}={declared}).",
+            )
+        if not declared:
+            return (
+                False,
+                f"Omitted because account plan '{plan_name}' does not declare '{declared_name}'.",
+            )
+        return (True, None)
+
+    return {
+        "exclude_styles": _apply_override("exclude_styles", declared_adv, "controls.advanced"),
+        "sliders": _apply_override("sliders", declared_adv, "controls.advanced"),
+        "max_mode": _apply_override("max_mode", declared_max, "max_mode"),
+    }
+
+
 def build_sanitized_mcp_payload(
     spec: dict[str, Any],
     snapshot: dict[str, Any],
@@ -98,23 +138,29 @@ def build_sanitized_mcp_payload(
     operation: str,
     mcp_tool: str,
     resolved_model: str | None,
+    runtime_overrides: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, str]], str | None]:
-    """Build live MCP payload, omitting unsupported controls or blocking unsupported paid toggles."""
+    """Build live MCP payload, omitting incompatible controls or blocking unsupported paid toggles."""
     gen = spec["generation"]
     controls = gen.get("controls") or {}
     source = gen.get("source") or {}
-    caps = snapshot.get("capabilities") or {}
     plan_name = snapshot.get("plan", "unknown")
 
-    advanced_controls = caps.get("advanced_controls", True)
-    supports_max_mode = caps.get("max_mode", plan_name in {"pro", "premier"})
+    effective = resolve_effective_capabilities(
+        snapshot,
+        resolved_model=resolved_model,
+        runtime_overrides=runtime_overrides,
+    )
+    can_exclude, exclude_reason = effective["exclude_styles"]
+    can_sliders, sliders_reason = effective["sliders"]
+    can_max_mode, max_mode_reason = effective["max_mode"]
 
     omitted: list[dict[str, str]] = []
-    if controls.get("max_mode") is True and not supports_max_mode:
+    if controls.get("max_mode") is True and not can_max_mode:
         return (
             {},
             omitted,
-            f"Unsupported control: generation.controls.max_mode is true, but account plan '{plan_name}' does not grant max_mode.",
+            f"Unsupported control: generation.controls.max_mode is true ({max_mode_reason or plan_name}).",
         )
 
     payload: dict[str, Any] = {}
@@ -138,13 +184,13 @@ def build_sanitized_mcp_payload(
 
         exclude_styles = gen.get("exclude_styles") or []
         if exclude_styles:
-            if advanced_controls:
+            if can_exclude:
                 payload["negative_style"] = ", ".join(str(s) for s in exclude_styles if str(s).strip())
             else:
                 omitted.append(
                     {
                         "control": "generation.exclude_styles",
-                        "reason": f"Omitted because account plan '{plan_name}' lacks 'controls.advanced' grant.",
+                        "reason": exclude_reason or "Omitted by capability guard.",
                     }
                 )
 
@@ -171,11 +217,11 @@ def build_sanitized_mcp_payload(
                     }
                 )
                 continue
-            if not advanced_controls:
+            if not can_sliders:
                 omitted.append(
                     {
                         "control": f"generation.controls.{key}",
-                        "reason": f"Omitted because account plan '{plan_name}' lacks 'controls.advanced' grant.",
+                        "reason": sliders_reason or "Omitted by capability guard.",
                     }
                 )
                 continue
@@ -248,9 +294,11 @@ def evaluate_execution_plan(
     user_approved: bool | None = None,
     spent_in_budget: int = 0,
     baseline_commit_sha: str | None = None,
+    runtime_overrides: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Run full preflight gate: spec validation, model resolution, control sanitization, cost & approval check."""
     caps_cfg, routing_cfg = _load_adapter_configs()
+    effective_overrides = (caps_cfg.get("runtime_overrides") or {}) if runtime_overrides is None else runtime_overrides
     snapshot = normalize_capability_snapshot(raw_or_normalized_usage)
     policy = spec["execution_policy"]
     gen = spec["generation"]
@@ -342,13 +390,14 @@ def evaluate_execution_plan(
             ],
         )
 
-    # 5. Live MCP control compatibility gate (omit unsupported sliders / block unsupported paid toggles)
+    # 5. Live MCP control compatibility gate (declared capabilities + runtime overrides)
     mcp_payload, omitted_controls, control_block_reason = build_sanitized_mcp_payload(
         spec,
         snapshot,
         operation=op,
         mcp_tool=mcp_tool,
         resolved_model=resolved_model,
+        runtime_overrides=effective_overrides,
     )
     if control_block_reason:
         return _finish("blocked", control_block_reason, approved=False)

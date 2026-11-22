@@ -21,6 +21,16 @@
         "artifact_risk": { "type": "number", "minimum": 0, "maximum": 1 }
       }
     },
+    "adherence": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["confirmed_match", "confirmed_mismatch", "ambiguous", "not_evaluated"]
+      }
+    },
+    "observations": {
+      "type": "object"
+    },
     "ai_tells": {
       "type": "array",
       "items": { "type": "string" }
@@ -40,7 +50,13 @@
           },
           "domain": {
             "type": "string",
-            "enum": ["composition", "arrangement", "lyrics", "pronunciation", "suno", "execution", "mix"]
+            "enum": ["composition", "arrangement", "lyrics", "pronunciation", "suno", "execution", "mix", "cross_domain"]
+          },
+          "confidence": {
+            "oneOf": [
+              { "type": "number", "minimum": 0, "maximum": 1 },
+              { "type": "string", "enum": ["low", "medium", "high"] }
+            ]
           },
           "evidence": { "type": "string", "minLength": 1 },
           "spec_path": {

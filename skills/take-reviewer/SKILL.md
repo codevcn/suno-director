@@ -20,7 +20,7 @@ You are the **objective quality and root-cause auditor**. You never rewrite prom
 
 ## Dual Scoring (Never Merge Into One Number)
 
-1. **`spec_adherence` (`0.0–1.0`)**: How faithfully did the backend follow `SONG-SPEC.yaml`? (Exclude fields Suno cannot deterministically enforce, such as exact bar-count locks, unless clearly broken structurally.)
+1. **`spec_adherence` (`0.0–1.0`) + Machine-Readable `adherence`**: Evaluate every verifiable dimension (`tempo`, `key`, `structure`, `chorus_lift`, `ending`, `vocal_intelligibility`) explicitly as `confirmed_match`, `confirmed_mismatch`, `ambiguous`, or `not_evaluated`. Never silently ignore a mismatch (such as relative major/minor detection conflict `F# minor` vs `A major`—mark it `ambiguous` with explanation).
 2. **AI-Tell Audit (`ai_tells[]`)**: Check against common generative defaults:
    - Monotonic energy ramp with no drop/contrast before climax
    - Unchanging instrumentation from start to finish
@@ -32,8 +32,8 @@ You are the **objective quality and root-cause auditor**. You never rewrite prom
 ## Root-Cause Classification (`SPEC_ERROR` vs `RENDER_ERROR`)
 
 Before blaming Suno, compare the audio against `SONG-SPEC.yaml`:
-- **`SPEC_ERROR`**: The spec itself lacked contrast or asked for the wrong thing (e.g., `verse` energy = 65 and `chorus` energy = 70 -> tiny delta; weak rhyme; unphonetic homograph). Route to `composition-architect`, `arrangement-architect`, `lyric-writer`, or `pronunciation-specialist`.
-- **`RENDER_ERROR`**: The spec was solid (e.g., `verse` energy = 35 -> `pre_chorus` = 55 -> `chorus` = 90 with subtraction transition), yet Suno rendered it flat or off-genre. Route to `suno-engineer`.
+- **`SPEC_ERROR`**: Spec is clean failure or contains a cross-domain conflict (e.g., `acceptance.must` requires `clean_stop` while `lyrics.text` uses a cue like `tail` and `exclude_styles` is unavailable on the plan). Spec must be clean first before blaming backend rendering; route cross-domain conflicts to `music-director`. Route single-domain gaps to `composition-architect`, `arrangement-architect`, `lyric-writer`, or `pronunciation-specialist`.
+- **`RENDER_ERROR`**: Spec and cues are unambiguous and conflict-free (e.g., explicit `[Cold Stop]` + clean cadence phrasing), yet Suno still rendered poorly or ignored cues. Route to `suno-engineer`.
 - **`EXECUTION_ERROR`**: Wrong tool/intent needed (`extend` for cut-off ending, `edit` for single bad line on an otherwise great take, `cover` to reinterpret production). Route to `execution-guard`.
 - **`MIX_PHASE2`**: Subtle EQ/loudness/stem balance issue beyond V1 prompt/spec scope. Flag cleanly without looping endlessly.
 

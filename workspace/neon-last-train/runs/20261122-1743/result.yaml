@@ -1,0 +1,64 @@
+run_id: "20261122-1743"
+timestamp_utc: "2026-11-22T10:44:41Z"
+baseline_commit_sha: "b9146ef815f594f0cbd072402edf3705a2229581"
+initial_v1_freeze_sha: "c22491f876bc935cf93ad40d197187f710fc08de"
+spec_path: "workspace/neon-last-train/SONG-SPEC.yaml"
+spec_revision_before: 1
+spec_revision_after: 1
+operation: "create"
+mcp_tool: "audio-create"
+requested_model: "auto"
+resolved_model: "v6-mini"
+idempotency_key: "music-director-neon-last-train-r2-20261122"
+credits:
+  song_before: 150
+  song_after: 140
+  song_delta: -10
+  download_before: 7
+  download_after: 7
+  download_delta: 0
+live_guard_observations:
+  - "Initial audio-create with negative_style and controls={variety:0} failed cleanly with 403 feature_not_on_plan (0 credits charged) despite account-usage.features listing controls.advanced."
+  - "Updated execution_guard.py in commit b9146ef to omit sliders and exclude_styles on plan=='free'; retried audio-create succeeded cleanly with 10 credits spent."
+omitted_controls:
+  - control: "generation.exclude_styles"
+    reason: "Omitted because account plan 'free' lacks 'controls.advanced' grant."
+  - control: "generation.controls.variety"
+    reason: "Omitted because account plan 'free' lacks 'controls.advanced' grant."
+takes:
+  - id: "0d84855b-1ffc-4864-812c-1b717bcf8a19"
+    status: "complete"
+    duration_seconds: 209.64
+    model: "v6-mini"
+    song_url: "https://suno.com/song/0d84855b-1ffc-4864-812c-1b717bcf8a19"
+    listen_job_id: "5260f5a2-f194-4389-bfea-c1daf7d4d4cc"
+    listen_metrics:
+      bpm: 108
+      key: "A major"
+      chorus_lift: true
+      pre_chorus_drop: true
+      sax_solo_audible: true
+      clean_ending: false
+      vocal_intelligible: true
+      trap_or_edm_intrusion: false
+      artifacts: false
+    listen_notes: "108 BPM exact match, clear Rhodes/bass/guitar/synth-brass/tenor-sax bridge, Zero-zero-fifteen clear, Verse 1->Pre-Chorus->Chorus x3->Verse 2->Sax Bridge->Outro structure present; ending fades out instead of band stop."
+  - id: "dd6f21ca-23ad-49bd-9041-3143ca2a4fa5"
+    status: "complete"
+    duration_seconds: 209.84
+    model: "v6-mini"
+    song_url: "https://suno.com/song/dd6f21ca-23ad-49bd-9041-3143ca2a4fa5"
+    listen_job_id: "fa5b7061-098a-4533-b6f9-af6579abd6c7"
+    listen_metrics:
+      bpm: 107.1
+      key: "A major"
+      chorus_lift: true
+      pre_chorus_drop: true
+      sax_solo_audible: true
+      clean_ending: false
+      vocal_intelligible: true
+      trap_or_edm_intrusion: false
+      artifacts: false
+    listen_notes: "107.1 BPM, strong instrumentation & chorus lift & sax bridge, added an unrequested second pre-chorus before Chorus 2; ending fades out."
+selected_candidate_take_id: "0d84855b-1ffc-4864-812c-1b717bcf8a19"
+notes: "0 download credits spent (audio-download never called). No second generation run triggered per Step 11-12 single-cycle rule."

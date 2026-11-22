@@ -1,0 +1,126 @@
+decision: allowed
+reason: 'Approved per_cycle execution: audio-create using v6-mini (10 song credits).'
+operation: create
+mcp_tool: audio-create
+requested_model: auto
+resolved_model: v6-mini
+estimated_song_credits: 10
+estimated_download_credits: 0
+remaining_song_credits_after: 140
+remaining_download_credits_after: 7
+baseline_commit_sha: b9146ef815f594f0cbd072402edf3705a2229581
+spec_revision_before: 1
+spec_revision_after: 1
+mcp_payload:
+  title: Neon Last Train
+  instrumental: false
+  style: Female mezzo-soprano vocal with silky clear tone and wistful phrasing. 1980s
+    Japanese city pop, bittersweet nocturnal groove, 108 BPM, F# minor, fingered and
+    popped electric bass playing slightly ahead of the beat, stereo Rhodes electric
+    piano, 16th-note muted clean guitar, gated reverb snare, analog synth brass in
+    chorus, warm tenor saxophone solo in bridge, warm tape saturation, clean band
+    stop ending
+  model: v6-mini
+  lyrics: '[Intro]
+
+
+    [Verse 1 - intimate, close vocal]
+
+    Raindrops trace the neon on the platform glass
+
+    Zero-zero-fifteen, watching shadows pass
+
+    Ticket in my coat pocket, ink begins to blur
+
+    Counting every footstep where we never were
+
+
+    [Pre-Chorus - rising tension]
+
+    Yellow warning lights blink along the track
+
+    Once the doors slide shut, there is no turning back
+
+
+    [Chorus - open, layered harmonies]
+
+    Ride the neon last train through the midnight glow
+
+    Every streetlamp flickers like a silent show
+
+    I let go of yesterday at the station gate
+
+    Maybe missing one train means I am right on time, not late
+
+
+    [Verse 2 - rhythmic groove]
+
+    Vending machine hums a soft electric tune
+
+    Reflections on the river catch a silver moon
+
+    Empty wooden bench feels lighter than before
+
+    Someone else''s laughter fades behind the door
+
+
+    [Chorus - bright, energetic]
+
+    Ride the neon last train through the midnight glow
+
+    Every streetlamp flickers like a silent show
+
+    I let go of yesterday at the station gate
+
+    Maybe missing one train means I am right on time, not late
+
+
+    [Bridge - instrumental sax solo]
+
+
+    [Chorus - soaring ad-libs]
+
+    Ride the neon last train through the midnight glow
+
+    Every streetlamp flickers like a silent show
+
+    I let go of yesterday at the station gate
+
+    Maybe missing one train means I am right on time, not late
+
+
+    [Outro - clean saxophone tail]
+
+    '
+  duration: 210
+omitted_controls:
+- control: generation.exclude_styles
+  reason: Omitted due to observed runtime incompatibility on 'free'/'v6-mini' (403
+    feature_not_on_plan (excluded styles) despite controls.advanced in account-usage.features;
+    declared controls.advanced=True).
+- control: generation.controls.variety
+  reason: Omitted due to observed runtime incompatibility on 'free'/'v6-mini' (403
+    feature_not_on_plan (sliders) despite controls.advanced in account-usage.features;
+    declared controls.advanced=True).
+capability_snapshot:
+  plan: free
+  song_credits:
+    remaining: 150
+  download_credits:
+    remaining: 7
+  models:
+    allowed:
+    - v6-mini
+  capabilities:
+    create: true
+    cover: true
+    extend: true
+    edit: true
+    download: limited
+    advanced_controls: true
+    max_mode: false
+approval:
+  confirmation_mode: per_cycle
+  approved: true
+  approved_song_credit_budget: 0
+  approved_download_credit_budget: 0
